@@ -60,7 +60,7 @@ def argtype(*types, customException=True):
     '''
     @argtype(*types, customException=True)
 
-    Decorator that checks if arguments types of a function match the expected argument types.
+    Decorator that checks if argument types of a function match the expected argument types.
     Raises ArgTypeError (or TypeError with customException=False) in case of mismatch.
 
     Params:
