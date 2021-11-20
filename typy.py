@@ -75,7 +75,7 @@ def argtype(*types, customException=True):
                 if type(arg) != expectedType:
                     error = _formatError(ERROR_MSG, expectedType, arg)
                     if customException:
-                        raise StrongTypeError(error)
+                        raise ArgTypeError(error)
                     raise TypeError(error)
             return func(*args, **kwargs)
         return wrapper
