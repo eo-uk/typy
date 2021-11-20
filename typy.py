@@ -4,6 +4,7 @@
 #--------------------------------------------------------------------------------------------
 # Author: eo-uk
 # Version: 1.0
+# License: MIT License
 # GitHub: github.com/eo-uk/typy
 #
 # Description:
