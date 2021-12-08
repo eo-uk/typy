@@ -10,14 +10,14 @@ class TestTypy(unittest.TestCase):
         self.assertEqual(foo(2), 4)
     
     def test_argtype_mismatch(self):
-        @typy.argtype(int)
+        @typy.argtype(i=int)
         def foo(i):
             return i*i
         with self.assertRaises(typy.ArgTypeError) as context:
             foo("string")
 
     def test_argtype_without_custom_exception(self):
-        @typy.argtype(int, customException=False)
+        @typy.argtype(i=int, customException=False)
         def foo(i):
             return i*i
         try:
@@ -28,13 +28,13 @@ class TestTypy(unittest.TestCase):
             pass
 
     def test_argtype_multi_args_match(self):
-        @typy.argtype(int, int)
+        @typy.argtype(i=int, j=int)
         def foo(i, j):
             return i*j
         self.assertEqual(foo(2, 3), 6)
 
     def test_argtype_multi_args_mismatch(self):
-        @typy.argtype(int, float)
+        @typy.argtype(i=int, j=float)
         def foo(i, j):
             return i*j
         with self.assertRaises(typy.ArgTypeError) as context:
@@ -65,7 +65,7 @@ class TestTypy(unittest.TestCase):
             pass
 
     def test_argtype_returntype_together(self):
-        @typy.argtype(int, int)
+        @typy.argtype(i=int, j=int)
         @typy.returntype(float)
         def foo(i, j):
             return i / j

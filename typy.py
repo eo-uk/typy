@@ -8,9 +8,9 @@
 # GitHub: github.com/eo-uk/typy
 #
 # Description:
-# This light-weight library provides decorators that can be used
-# to implement strongly-typed behaviour in Python projects.
-# Works with built-in as well as custom classes.
+# This light-weight library provides decorators and functions 
+# that can be used to implement strongly-typed behaviour in
+# Python projects. Works with built-in as well as custom classes.
 # Decorators can be used together or stand alone.
 #
 #--------------------------------------------------------------------------------------------
@@ -19,7 +19,7 @@
 #   class Bar():
 #        pass
 #
-#    @argtype(int, int, Bar)
+#    @argtype(a=int, b=int, c=Bar)
 #    @returntype(float)
 #    def foo(a, b, c):
 #        return a / b
@@ -48,7 +48,11 @@ class VarTypeError(StrongTypeError):
     """Raised when vartype fails to match expected type"""
     pass
 
-def _formatError(msg, expected, actual):
+class IllegalArgumentError(ValueError):
+    """Raised when argtype is called with args instead of kwargs"""
+    pass
+
+def _formatError(msg, expected, actual, name=None):
     '''
     Formats error message in exception
     
@@ -59,16 +63,23 @@ def _formatError(msg, expected, actual):
     '''
     return (
         msg
+        + ('\nVariable Name: ' + name if name else '')
         + "\n - Expected  : " + str(expected)
         + "\n - Actual    : " + str(type(actual)) + " " + str(actual)
     )
 
-def argtype(*types, customException=True):
+def argtype(customException=True, *expectedTypesArgs, **expectedTypesKwargs):
     '''
-    @argtype(*types, customException=True)
+    @argtype(**expectedTypesKwargs, customException=True)
 
     Decorator that checks if argument types of a function match the expected argument types.
     Raises ArgTypeError (or TypeError with customException=False) in case of mismatch.
+    Must be called with keyword arguments only.
+    
+    Exampe Usage:
+        @argtype(a=str, b=int, c=bool)
+        foo(a, b, c):
+            pass
 
     Params:
         *types (class): Expected types. Order of types must match order of parameters
@@ -77,12 +88,33 @@ def argtype(*types, customException=True):
     ERROR_MSG = "Argument type does not match expected argument type"
     def inner(func):
         def wrapper(*args, **kwargs):
-            for arg, expectedType in zip(args, types):
-                if type(arg) != expectedType:
-                    error = _formatError(ERROR_MSG, expectedType, arg)
-                    if customException:
-                        raise ArgTypeError(error)
-                    raise TypeError(error)
+            # Check if argtype kwarg count matches func arg count
+            if len(expectedTypesKwargs) < func.__code__.co_argcount:
+                raise IllegalArgumentError("argtype keyword argument count must match the function's argument count")
+            
+            # Turn args into kwargs
+            actualArgs = {name: arg for arg, name in zip(args, func.__code__.co_varnames)}
+            #actualArgs.update(kwargs)
+            #print(actualArgs)
+            
+            # Compare arg types
+            for actualArgName, actualArgValue in actualArgs.items():
+                for expectedArgName, expectedArgType in expectedTypesKwargs.items():
+                    if actualArgName == expectedArgName and type(actualArgValue) != expectedArgType:
+                        error = _formatError(ERROR_MSG, expectedArgType, actualArgValue, name=actualArgName)
+                        if customException:
+                            raise ArgTypeError(error)
+                        raise TypeError(error)
+
+            # Compare kwarg types
+            for actualKwargName, actualKwargValue in kwargs.items():
+                for expectedKwargName, expectedKwargType in expectedTypesKwargs.items():
+                    if actualKwargName == expectedKwargName and type(actualKwargValue) != expectedKwargType:
+                        error = _formatError(ERROR_MSG, expectedKwargType, actualKwargValue, name=actualKwargName)
+                        if customException:
+                            raise ArgTypeError(error)
+                        raise TypeError(error)
+                    
             return func(*args, **kwargs)
         return wrapper
     return inner
@@ -130,3 +162,6 @@ def vartype(expectedType, value, customException=True):
             raise VarTypeError(error)
         raise TypeError(error)
     return value
+
+
+
