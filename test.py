@@ -110,6 +110,38 @@ class TestTypy(unittest.TestCase):
         except:
             self.fail("Custom class caused an unexpected Exception")
 
+    def test_class_method_match(self):
+        class Bar():
+            @argtype(a=str, b=str)
+            def foo(self, a, b):
+                return a + b
+        bar = Bar()
+        self.assertEqual(bar.foo('test ', 'string'), 'test string')
+
+    def test_class_method_mismatch(self):
+        class Bar():
+            @argtype(a=str, b=str)
+            def foo(self, a, b):
+                return a + b
+        bar = Bar()
+        with self.assertRaises(ArgTypeError) as context:
+            bar.foo('test ', 42)
+
+    def test_class_init_method_match(self):
+        class Bar():
+            @argtype(a=str)
+            def __init__(self, a):
+                self.a = a
+        bar = Bar('test')
+        
+    def test_class_init_method_mismatch(self):
+        class Bar():
+            @argtype(a=str)
+            def __init__(self, a):
+                self.a = a
+        with self.assertRaises(ArgTypeError) as context:
+            bar = Bar(42)
+        
     def test_vartype_match(self):
         i = vartype(int, 5)
 
