@@ -16,21 +16,23 @@
 #--------------------------------------------------------------------------------------------
 # Example Usage:
 #--------------------------------------------------------------------------------------------
-#   from typy import *
+#    from typy import *
 #
-#   class Bar():
-#        pass
+#    class Bar():
+#        @argtype(s=str)
+#        def __init__(self, s):
+#            self.s = s
 #
 #    @argtype(a=int, b=int, c=Bar)
 #    @returntype(float)
 #    def foo(a, b, c):
 #        return a / b
 #
-#    bar = Bar()
+#    bar = Bar('test')
 #    print(foo(6, 3, bar))
 #
 #    x = vartype(int, 5)
-#    y = vartype(Bar, Bar())
+#    y = vartype(Bar, Bar('test'))
 #--------------------------------------------------------------------------------------------
 
 
