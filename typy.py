@@ -67,7 +67,7 @@ def _formatError(msg, expected, actual, name=None):
         + "\n - Actual    : " + str(type(actual)) + " " + str(actual)
     )
 
-def argtype(customException=True, *expectedTypesArgs, **expectedTypesKwargs):
+def argtype(customException=True, **expectedTypesKwargs):
     '''
     @argtype(**expectedTypesKwargs, customException=True)
 
@@ -75,13 +75,13 @@ def argtype(customException=True, *expectedTypesArgs, **expectedTypesKwargs):
     Raises ArgTypeError (or TypeError with customException=False) in case of mismatch.
     *** Must be called with keyword arguments only. ***
     
-    Exampe Usage:
+    Example Usage:
         @argtype(a=str, b=int, c=bool)
         foo(a, b, c):
             pass
 
     Params:
-        *types (class): Expected types. Order of types must match order of parameters
+        **expectedTypesKwargs (class): Variable names and their expected types.
         customException (bool): Raises ArgTypeError if true, else raises TypeError
     '''
     ERROR_MSG = "Argument type does not match expected argument type"
