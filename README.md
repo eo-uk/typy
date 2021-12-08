@@ -1,5 +1,5 @@
 # typy
-Static Typing in Python with Decorators
+Static Typing in Python with Decorators  
 *Version: 1.1*
 
 ## Description
