@@ -1,6 +1,6 @@
 #--------------------------------------------------------------------------------------------
 # TyPy
-# Static Typing in Python with Decorators
+# Static Typing in Python with Decorators and Functions
 #--------------------------------------------------------------------------------------------
 # Author: eo-uk
 # Version: 1.1
@@ -138,7 +138,7 @@ def vartype(expectedType, value, customException=True):
     vartype(expectedType, customException=True)
 
     Function that checks if the type of a variable's value matches the expected type.
-    Raises ReturnTypeError (or TypeError with customException=False) in case of mismatch.
+    Raises VarTypeError (or TypeError with customException=False) in case of mismatch.
 
     Params:
         expectedType (class): Expected type of the variable's value
