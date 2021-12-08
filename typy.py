@@ -3,7 +3,7 @@
 # Strong Typing in Python with Decorators
 #--------------------------------------------------------------------------------------------
 # Author: eo-uk
-# Version: 1.0
+# Version: 1.1
 # License: MIT License
 # GitHub: github.com/eo-uk/typy
 #
@@ -16,6 +16,8 @@
 #--------------------------------------------------------------------------------------------
 # Example Usage:
 #--------------------------------------------------------------------------------------------
+#   from typy import *
+#
 #   class Bar():
 #        pass
 #
@@ -60,6 +62,7 @@ def _formatError(msg, expected, actual, name=None):
         msg (str): Error message
         expected (class): Expected type
         actual (any): Actual value detected
+        name=None (string): Name of the variable
     '''
     return (
         msg
@@ -74,7 +77,7 @@ def argtype(customException=True, *expectedTypesArgs, **expectedTypesKwargs):
 
     Decorator that checks if argument types of a function match the expected argument types.
     Raises ArgTypeError (or TypeError with customException=False) in case of mismatch.
-    Must be called with keyword arguments only.
+    *** Must be called with keyword arguments only. ***
     
     Exampe Usage:
         @argtype(a=str, b=int, c=bool)
@@ -88,16 +91,16 @@ def argtype(customException=True, *expectedTypesArgs, **expectedTypesKwargs):
     ERROR_MSG = "Argument type does not match expected argument type"
     def inner(func):
         def wrapper(*args, **kwargs):
+            
             # Check if argtype kwarg count matches func arg count
             if len(expectedTypesKwargs) < func.__code__.co_argcount:
                 raise IllegalArgumentError("argtype keyword argument count must match the function's argument count")
             
-            # Turn args into kwargs
+            # Turn args into kwargs and merge with remaining kwargs
             actualArgs = {name: arg for arg, name in zip(args, func.__code__.co_varnames)}
-            #actualArgs.update(kwargs)
-            #print(actualArgs)
+            actualArgs.update(kwargs)
             
-            # Compare arg types
+            # Compare types
             for actualArgName, actualArgValue in actualArgs.items():
                 for expectedArgName, expectedArgType in expectedTypesKwargs.items():
                     if actualArgName == expectedArgName and type(actualArgValue) != expectedArgType:
@@ -105,16 +108,7 @@ def argtype(customException=True, *expectedTypesArgs, **expectedTypesKwargs):
                         if customException:
                             raise ArgTypeError(error)
                         raise TypeError(error)
-
-            # Compare kwarg types
-            for actualKwargName, actualKwargValue in kwargs.items():
-                for expectedKwargName, expectedKwargType in expectedTypesKwargs.items():
-                    if actualKwargName == expectedKwargName and type(actualKwargValue) != expectedKwargType:
-                        error = _formatError(ERROR_MSG, expectedKwargType, actualKwargValue, name=actualKwargName)
-                        if customException:
-                            raise ArgTypeError(error)
-                        raise TypeError(error)
-                    
+   
             return func(*args, **kwargs)
         return wrapper
     return inner
@@ -134,12 +128,15 @@ def returntype(expectedType, customException=True):
     ERROR_MSG = "Return type does not match expected return type"
     def inner(func):
         def wrapper(*args, **kwargs):
+
+            # Get return value of func and compare its type
             result = func(*args, **kwargs)
             if type(result) != expectedType:
                 error = _formatError(ERROR_MSG, expectedType, result)
                 if customException:
                     raise ReturnTypeError(error)
                 raise TypeError(error)
+            
             return func(*args, **kwargs)
         return wrapper
     return inner
@@ -156,12 +153,10 @@ def vartype(expectedType, value, customException=True):
         customException (bool): Raises VarTypeError if true, else raises TypeError
     '''
     ERROR_MSG = "Variable type does not match expected variable type"
+    # Compare variable type
     if type(value) != expectedType:
         error = _formatError(ERROR_MSG, expectedType, value)
         if customException:
             raise VarTypeError(error)
         raise TypeError(error)
     return value
-
-
-

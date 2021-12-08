@@ -4,7 +4,7 @@ import typy
 class TestTypy(unittest.TestCase):
 
     def test_argtype_match(self):
-        @typy.argtype(int)
+        @typy.argtype(i=int)
         def foo(i):
             return i*i
         self.assertEqual(foo(2), 4)
