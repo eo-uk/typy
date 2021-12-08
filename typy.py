@@ -42,6 +42,10 @@ class ReturnTypeError(StrongTypeError):
     """Raised when returntype fails to match expected type"""
     pass
 
+class VarTypeError(StrongTypeError):
+    """Raised when vartype fails to match expected type"""
+    pass
+
 def _formatError(msg, expected, actual):
     '''
     Formats error message in exception
@@ -106,3 +110,11 @@ def returntype(expectedType, customException=True):
         return wrapper
     return inner
 
+def vartype(expectedType, value, customException=True):
+    ERROR_MSG = "Variable type does not match expected variable type"
+    if type(value) != expectedType:
+        error = _formatError(ERROR_MSG, expectedType, value)
+        if customException:
+            raise VarTypeError(error)
+        raise TypeError(error)
+    return value
