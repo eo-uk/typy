@@ -50,10 +50,6 @@ class VarTypeError(StrongTypeError):
     """Raised when vartype fails to match expected type"""
     pass
 
-class IllegalArgumentError(ValueError):
-    """Raised when argtype is called with args instead of kwargs"""
-    pass
-
 def _formatError(msg, expected, actual, name=None):
     '''
     Formats error message in exception
@@ -91,15 +87,11 @@ def argtype(customException=True, *expectedTypesArgs, **expectedTypesKwargs):
     ERROR_MSG = "Argument type does not match expected argument type"
     def inner(func):
         def wrapper(*args, **kwargs):
-            
-            # Check if argtype kwarg count matches func arg count
-            if len(expectedTypesKwargs) < func.__code__.co_argcount:
-                raise IllegalArgumentError("argtype keyword argument count must match the function's argument count")
-            
+
             # Turn args into kwargs and merge with remaining kwargs
             actualArgs = {name: arg for arg, name in zip(args, func.__code__.co_varnames)}
             actualArgs.update(kwargs)
-            
+
             # Compare types
             for actualArgName, actualArgValue in actualArgs.items():
                 for expectedArgName, expectedArgType in expectedTypesKwargs.items():
