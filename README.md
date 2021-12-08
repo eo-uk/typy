@@ -16,4 +16,7 @@ def foo(a, b, c):
 
 bar = Bar()
 print(foo(6, 3, bar))
+
+x = vartype(int, 5)
+y = vartype(Bar, Bar())
 ```
