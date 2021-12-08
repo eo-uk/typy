@@ -11,14 +11,14 @@ from typy import *
 class Bar():
 	pass
 
-	@argtype(a=int, b=int, c=Bar)
-	@returntype(float)
-	def foo(a, b, c):
-		return a / b
+@argtype(a=int, b=int, c=Bar)
+@returntype(float)
+def foo(a, b, c):
+	return a / b
 
-	bar = Bar()
-	print(foo(6, 3, bar))
+bar = Bar()
+print(foo(6, 3, bar))
 
-	x = vartype(int, 5)
-	y = vartype(Bar, Bar())
+x = vartype(int, 5)
+y = vartype(Bar, Bar())
 ```
