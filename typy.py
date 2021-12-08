@@ -111,6 +111,16 @@ def returntype(expectedType, customException=True):
     return inner
 
 def vartype(expectedType, value, customException=True):
+    '''
+    vartype(expectedType, customException=True)
+
+    Function that checks if the type of a variable's value matches the expected type.
+    Raises ReturnTypeError (or TypeError with customException=False) in case of mismatch.
+
+    Params:
+        expectedType (class): Expected type of the variable's value
+        customException (bool): Raises VarTypeError if true, else raises TypeError
+    '''
     ERROR_MSG = "Variable type does not match expected variable type"
     if type(value) != expectedType:
         error = _formatError(ERROR_MSG, expectedType, value)
