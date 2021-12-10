@@ -132,7 +132,7 @@ def returntype(expectedType, customException=True):
                     raise ReturnTypeError(error)
                 raise TypeError(error)
             
-            return func(*args, **kwargs)
+            return result
         return wrapper
     return inner
 
