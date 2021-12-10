@@ -1,6 +1,6 @@
 #--------------------------------------------------------------------------------------------
 # TyPy
-# Static Typing in Python with Decorators and Functions
+# Static Typing in Python without the Type Annotation Syntax
 #--------------------------------------------------------------------------------------------
 # Author: eo-uk
 # Version: 1.1
@@ -10,7 +10,8 @@
 # Description:
 # This light-weight library provides decorators and functions 
 # that can be used to implement statically-typed behaviour in
-# Python projects. Works with built-in as well as custom classes.
+# Python projects without needing the type annotation syntax.
+# Works with built-in as well as custom classes.
 # Decorators can be used together or stand alone.
 #
 #--------------------------------------------------------------------------------------------
@@ -36,19 +37,19 @@
 #--------------------------------------------------------------------------------------------
 
 
-class StrongTypeError(TypeError):
+class StaticTypeError(TypeError):
     """Base exception for TyPy errors"""
     pass
 
-class ArgTypeError(StrongTypeError):
+class ArgTypeError(StaticTypeError):
     """Raised when argtype fails to match expected type"""
     pass
 
-class ReturnTypeError(StrongTypeError):
+class ReturnTypeError(StaticTypeError):
     """Raised when returntype fails to match expected type"""
     pass
 
-class VarTypeError(StrongTypeError):
+class VarTypeError(StaticTypeError):
     """Raised when vartype fails to match expected type"""
     pass
 

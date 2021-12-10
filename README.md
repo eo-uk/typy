@@ -1,9 +1,9 @@
 # typy
-Static Typing in Python with Decorators  
+Static Typing in Python without the Type Annotation Syntax  
 *Version: 1.1*
 
 ## Description
-This light-weight library provides decorators and functions that can be used to implement statically-typed behaviour in Python projects. Works with built-in as well as custom classes. Decorators can be used together or stand alone.
+This light-weight library provides decorators and functions that can be used to implement statically-typed behaviour in Python projects without needing the type annotation syntax. Works with built-in as well as custom classes. Decorators can be used together or stand alone.
 
 ## Example Usage
 ```
